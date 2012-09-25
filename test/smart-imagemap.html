@@ -11,9 +11,6 @@
   <!-- Load local lib and tests. -->
   <script src="../src/smart-imagemap.js"></script>
   <script src="smart-imagemap_test.js"></script>
-  <!-- Removing access to jQuery and $. But it'll still be available as _$, if
-       you REALLY want to mess around with jQuery in the console. REMEMBER WE
-       ARE TESTING YOUR PLUGIN HERE -->
   <script>window._$ = jQuery.noConflict(true);</script>
 </head>
 <body>
@@ -23,6 +20,16 @@
   <h2 id="qunit-userAgent"></h2>
   <ol id="qunit-tests"></ol>
   <div id="qunit-fixture">
+
+      <img id="image1" src="sample.jpg" usemap="#samplemap" />
+      <img id="image2" src="sample-notexistend.jpg" usemap="#samplemap" />
+
+      <map name="samplemap">
+          <area shape="circle" coords="50,50,5" href="" alt="">
+          <area shape="default" coords="" href="" alt="">
+          <area shape="poly" coords="10,10,10,50,50,50" href="" alt="">
+          <area shape="rect" coords="10,10,50,50" href="" alt="">
+      </map>
 
   </div>
 </body>
