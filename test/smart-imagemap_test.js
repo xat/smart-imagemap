@@ -34,7 +34,7 @@
 
   test('widget instance', function() {
     var widget = $('#image1').smartImagemap().data('smartimagemap');
-    equal(typeof(widget), 'function', 'widget instance is retrievable');
+    equal(typeof(widget), 'object', 'widget instance is retrievable');
   });
 
   test('widget methods', function() {
@@ -47,33 +47,32 @@
 
   test('image loading', function() {
     var widget = $('#image1').smartImagemap().data('smartimagemap');
-    equal(widget.STATE, widget.STATES.NOTREADY, 'Not ready for updatesjet');
+    equal(widget.state, widget.STATES.NOTREADY, 'is not ready for updates jet');
     stop();
     setTimeout(function() {
       start();
-      ok(widget.orgWidth, 'Original Image Width Set');
-      ok(widget.orgHeight, 'Original Image Height Set');
-      equal(widget.STATE, widget.STATES.READY, 'Ready for updates');
+      ok(widget.orgWidth, 'original Image Width Set');
+      ok(widget.orgHeight, 'original Image Height Set');
+      equal(widget.state, widget.STATES.READY, 'is ready for updates');
     }, 1000);
   });
 
   test('image resizing', function() {
     var widget = $('#image1').smartImagemap().data('smartimagemap');
     stop();
-    widget.$image.load(function() {
+    setTimeout(function() {
       start();
-      $('#image1').attr({
-        'width': $('#image1').width() / 2,
-        'height': $('#image1').height() / 2
-      });
+      $('#image1').attr({ 'width': $('#image1').width() / 2, 'height': $('#image1').height() / 2 });
+      $('#image1').trigger('smartimagemap.update');
       stop();
       setTimeout(function() {
         start();
-        equal(widget.$areas[0].initcoords[0].x, 25, 'x coordinate should be 25');
-        equal(widget.$areas[0].initcoords[0].y, 25, 'y coordinate should be 25');
-        equal(widget.$areas[0].attr('coords'), '25,25,5', 'coords attribute has the correct value');
+        var $area = widget.$areas.first();
+        var meta = $area.data('smartimagemap.meta');
+        equal($area.attr('coords'), '25,25,5', 'coords attribute has the correct value');
       }, 200);
-    });
+    }, 500);
+
   });
 
   test('map', function() {
@@ -86,12 +85,12 @@
     var widget = $('#image1').smartImagemap().data('smartimagemap');
     equal(widget.prepareAreas(), 3, 'Areas are prepared');
     equal(widget.$areas.length, 3, 'Areas are prepared');
-    equal(widget.$areas[0].data('smartimagemap.meta'), {
+    deepEqual(widget.$areas.first().data('smartimagemap.meta'), {
       'initcoords': [{
        x: 50,
        y: 50
       }],
-      'initcoordsstring': '50,50,5',
+      'initcoordsstring': '50, 50 ,5',
       'radius': 5
     });
   });
